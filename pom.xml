@@ -3,4 +3,51 @@
   <groupId>annotation-simulation</groupId>
   <artifactId>annotation-simulation</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
+  <repositories>
+        <repository>
+            <id>compbio</id>
+            <url>http://compbio.charite.de/tl_files/maven</url>
+        </repository>
+    </repositories>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+<dependencies>
+ 
+  <dependency>
+    <groupId>ontologizer</groupId>
+    <artifactId>ontologizer</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
+  </dependency>
+    <dependency>
+    <groupId>javautil_pheno</groupId>
+    <artifactId>javautil_pheno</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
+  </dependency>
+  <dependency>
+	<groupId>com.google.guava</groupId>
+	<artifactId>guava</artifactId>
+	<version>21.0-rc1</version>
+  </dependency>
+  <dependency>
+  <groupId>junit</groupId>
+  <artifactId>junit</artifactId>
+  <version>4.11</version>
+  <scope>test</scope>
+</dependency>
+</dependencies>
+    
 </project>
