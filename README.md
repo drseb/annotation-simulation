@@ -3,3 +3,17 @@
 
 # annotation-simulation
 Code to simulated noisy and imprecise ontology-associations for objects, such as HPO-annotated patients with a particular disease.
+
+# usage
+
+code to generate a thousand HPO-annotated patients with some noise and imprecision
+
+```
+
+		AnnotationSimulator simulator = new AnnotationSimulator(ontologyFile, annotationFile, OntologyProjectType.HPO);
+
+		DiseaseDatabase db = DiseaseDatabase.OMIM;
+		String id = "114030";
+		ArrayList<ArrayList<Term>> patients = simulator.simulatePatients(db, id, 1000, 0.2, 0.4, 2, 10);
+		
+```
