@@ -9,11 +9,14 @@ Code to simulated noisy and imprecise ontology-associations for objects, such as
 code to generate a thousand HPO-annotated patients with some noise and imprecision
 
 ```
+// init
+AnnotationSimulator simulator = new AnnotationSimulator(ontologyFile, annotationFile, OntologyProjectType.HPO);
 
-		AnnotationSimulator simulator = new AnnotationSimulator(ontologyFile, annotationFile, OntologyProjectType.HPO);
+// the disease
+DiseaseDatabase db = DiseaseDatabase.OMIM;
+String id = "114030";
 
-		DiseaseDatabase db = DiseaseDatabase.OMIM;
-		String id = "114030";
-		ArrayList<ArrayList<Term>> patients = simulator.simulatePatients(db, id, 1000, 0.2, 0.4, 2, 10);
+// simulate now
+ArrayList<ArrayList<Term>> patients = simulator.simulatePatients(db, id, 1000, 0.2, 0.4, 2, 10);
 		
 ```
