@@ -11,7 +11,22 @@
         </repository>
     </repositories>
     
+        <distributionManagement>
+    <snapshotRepository>
+      <id>ssh-repository</id>
+      <url>scpexe://compbio:/var/www/tl_files/maven/</url>
+    </snapshotRepository>
+  </distributionManagement>
+    
     <build>
+    <extensions>
+  		<!-- Enabling the use of SSH -->
+      		<extension>
+		        <groupId>org.apache.maven.wagon</groupId>
+		        <artifactId>wagon-ssh-external</artifactId>
+		         <version>2.10</version>
+      		</extension>
+    	</extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
