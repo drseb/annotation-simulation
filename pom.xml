@@ -12,7 +12,22 @@
 		</repository>
 	</repositories>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ssh-repository</id>
+			<url>scpexe://compbio:/var/www/tl_files/maven/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<build>
+		<extensions>
+			<!-- Enabling the use of SSH -->
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh-external</artifactId>
+				<version>2.10</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -22,24 +37,6 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.4.1</version>
-				<executions>
-					<execution>
-						<id>enforce</id>
-						<configuration>
-							<rules>
-								<DependencyConvergence />
-							</rules>
-						</configuration>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -55,12 +52,6 @@
 			<groupId>javautil_pheno</groupId>
 			<artifactId>javautil_pheno</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>ontologizer</groupId>
-					<artifactId>ontologizer</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
