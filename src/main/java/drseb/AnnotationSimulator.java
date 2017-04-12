@@ -3,6 +3,7 @@ package drseb;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import drseb.exception.DiseaseNotFoundException;
 import hpo.DiseaseEntry;
 import hpo.DiseaseId;
 import hpo.DiseaseId.DiseaseDatabase;
@@ -68,16 +69,16 @@ public class AnnotationSimulator {
 	}
 
 	public ArrayList<ArrayList<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients,
-			double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int querySize) {
+			double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int querySize) throws DiseaseNotFoundException {
 		return simulatePatients(diseaseDb, diseaseIdent, numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp, querySize, querySize);
 	}
 
 	public ArrayList<ArrayList<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients,
-			double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int lowerBoundQuerySize, int upperBoundQuerySize) {
+			double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int lowerBoundQuerySize, int upperBoundQuerySize) throws DiseaseNotFoundException {
 
 		DiseaseId id = new DiseaseId(diseaseDb, diseaseIdent);
 		if (!annotations.containsKey(id)) {
-			throw new IllegalArgumentException("No disease with annotations found for " + id);
+			throw new DiseaseNotFoundException(id);
 		}
 
 		if (numberOfPatients < 1) {
