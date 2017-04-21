@@ -30,8 +30,19 @@ public class AnnotationSimulator {
 		throw new RuntimeException("not implemented so far...");
 	}
 
-	public AnnotationSimulator(String oboOntology, String annotationFile, OntologyProjectType type) {
+	public AnnotationSimulator(String oboOntology, String annotationFile, OntologyProjectType type, long seedForRandomGenerator) {
+		setupOntologyData(oboOntology, annotationFile, type);
+		queryModification = new QueryModification(hpoHelper.getOrganAbnormalitySubgraph(), hpoHelper.getOrganAbnormalitySubgraphSlim(),
+				seedForRandomGenerator);
+	}
 
+	public AnnotationSimulator(String oboOntology, String annotationFile, OntologyProjectType type) {
+		setupOntologyData(oboOntology, annotationFile, type);
+		queryModification = new QueryModification(hpoHelper.getOrganAbnormalitySubgraph(), hpoHelper.getOrganAbnormalitySubgraphSlim());
+
+	}
+
+	private void setupOntologyData(String oboOntology, String annotationFile, OntologyProjectType type) {
 		if (type == null) {
 			throw new IllegalArgumentException(OntologyProjectType.class.toString() + " cannot be null");
 		}
@@ -55,9 +66,6 @@ public class AnnotationSimulator {
 		else {
 			throw new RuntimeException("not implemented so far...");
 		}
-
-		queryModification = new QueryModification(hpoHelper.getOrganAbnormalitySubgraph(), hpoHelper.getOrganAbnormalitySubgraphSlim());
-
 	}
 
 	public int getNumberObjectsAnnotated() {
@@ -74,7 +82,8 @@ public class AnnotationSimulator {
 	}
 
 	public ArrayList<ArrayList<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients,
-			double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int lowerBoundQuerySize, int upperBoundQuerySize) throws DiseaseNotFoundException {
+			double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int lowerBoundQuerySize, int upperBoundQuerySize)
+			throws DiseaseNotFoundException {
 
 		DiseaseId id = new DiseaseId(diseaseDb, diseaseIdent);
 		if (!annotations.containsKey(id)) {
