@@ -32,8 +32,6 @@ log/
 target/
 
 # eclipse:
-.classpath
-.project
 .metadata
 bin/
 tmp/
