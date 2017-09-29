@@ -2,6 +2,7 @@ package drseb;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import drseb.exception.DiseaseNotFoundException;
 import hpo.DiseaseEntry;
@@ -62,8 +63,7 @@ public class AnnotationSimulator {
 				throw new RuntimeException("annotations have not been parse properly. invalid state");
 			}
 
-		}
-		else {
+		} else {
 			throw new RuntimeException("not implemented so far...");
 		}
 	}
@@ -76,14 +76,13 @@ public class AnnotationSimulator {
 		return annotations.values().stream().mapToInt(e -> e.getAnnotations().size()).sum();
 	}
 
-	public ArrayList<ArrayList<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients,
-			double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int querySize) throws DiseaseNotFoundException {
+	public List<List<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
+			double chanceOfBeingMappedUp, int querySize) throws DiseaseNotFoundException {
 		return simulatePatients(diseaseDb, diseaseIdent, numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp, querySize, querySize);
 	}
 
-	public ArrayList<ArrayList<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients,
-			double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int lowerBoundQuerySize, int upperBoundQuerySize)
-			throws DiseaseNotFoundException {
+	public List<List<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
+			double chanceOfBeingMappedUp, int lowerBoundQuerySize, int upperBoundQuerySize) throws DiseaseNotFoundException {
 
 		DiseaseId id = new DiseaseId(diseaseDb, diseaseIdent);
 		if (!annotations.containsKey(id)) {
@@ -95,9 +94,9 @@ public class AnnotationSimulator {
 		}
 
 		DiseaseEntry diseaseEntry = annotations.get(id);
-		ArrayList<ArrayList<Term>> simulatedQueries = new ArrayList<>();
+		List<List<Term>> simulatedQueries = new ArrayList<>();
 		for (int i = 0; i < numberOfPatients; i++) {
-			ArrayList<Term> patientAnnotations = queryModification.generateAnnotationSet(diseaseEntry.getAnnotations(), fractionOfNoiseTerms,
+			List<Term> patientAnnotations = queryModification.generateAnnotationSet(diseaseEntry.getAnnotations(), fractionOfNoiseTerms,
 					chanceOfBeingMappedUp, lowerBoundQuerySize, upperBoundQuerySize);
 			simulatedQueries.add(patientAnnotations);
 		}
