@@ -7,13 +7,14 @@ import java.util.List;
 import java.util.Set;
 
 import drseb.exception.DiseaseNotFoundException;
+import hpo.HpoDataProvider;
 import hpo.Item;
 import hpo.ItemId;
 import hpo.ItemId.ItemDatabase;
-import hpo.HpoDataProvider;
 import hpo.QueryModification;
 import ontologizer.go.Ontology;
 import ontologizer.go.Term;
+import sonumina.math.graph.SlimDirectedGraphView;
 import util.HpoHelper;
 
 /**
@@ -25,8 +26,9 @@ import util.HpoHelper;
 public class AnnotationSimulator {
 
 	private Ontology ontology;
+	private SlimDirectedGraphView<Term> ontologySlim;
+
 	private HashMap<ItemId, Item> annotations;
-	private HpoHelper hpoHelper;
 	private QueryModification queryModification;
 
 	public AnnotationSimulator(String oboOntology, String annotationFile, String separator, int objectIdColumn, int termColumn) {
@@ -35,13 +37,12 @@ public class AnnotationSimulator {
 
 	public AnnotationSimulator(String oboOntology, String annotationFile, OntologyProjectType type, long seedForRandomGenerator) {
 		setupOntologyData(oboOntology, annotationFile, type);
-		queryModification = new QueryModification(hpoHelper.getOrganAbnormalitySubgraph(), hpoHelper.getOrganAbnormalitySubgraphSlim(),
-				seedForRandomGenerator);
+		queryModification = new QueryModification(ontology, ontologySlim, seedForRandomGenerator);
 	}
 
 	public AnnotationSimulator(String oboOntology, String annotationFile, OntologyProjectType type) {
 		setupOntologyData(oboOntology, annotationFile, type);
-		queryModification = new QueryModification(hpoHelper.getOrganAbnormalitySubgraph(), hpoHelper.getOrganAbnormalitySubgraphSlim());
+		queryModification = new QueryModification(ontology, ontologySlim);
 
 	}
 
@@ -56,7 +57,7 @@ public class AnnotationSimulator {
 			hpoapi.setAnnotationFile(annotationFile);
 			hpoapi.parseOntologyAndAssociations();
 
-			this.hpoHelper = hpoapi.getHpoHelper();
+			HpoHelper hpoHelper = hpoapi.getHpoHelper();
 			this.annotations = hpoapi.getDiseaseId2entry();
 			if (hpoHelper == null || hpoHelper.getHpo() == null) {
 				throw new RuntimeException("hpo-helper or hpo null. invalid state");
@@ -64,6 +65,9 @@ public class AnnotationSimulator {
 			if (annotations == null || annotations.keySet().size() < 1) {
 				throw new RuntimeException("annotations have not been parse properly. invalid state");
 			}
+
+			this.ontology = hpoHelper.getOrganAbnormalitySubgraph();
+			this.ontologySlim = hpoHelper.getOrganAbnormalitySubgraphSlim();
 
 		} else {
 			throw new RuntimeException("not implemented so far...");
@@ -86,6 +90,14 @@ public class AnnotationSimulator {
 		List<ItemId> sublist = allObjectsAnnotated.subList(0, numObjectsToReturn - 1);
 		return sublist;
 
+	}
+
+	public HashMap<ItemId, Item> getAnnotations() {
+		return annotations;
+	}
+
+	public Ontology getOntology() {
+		return ontology;
 	}
 
 	public int getNumberObjectsAnnotated() {
