@@ -9,7 +9,7 @@ import java.util.Set;
 import drseb.exception.DiseaseNotFoundException;
 import hpo.Item;
 import hpo.ItemId;
-import hpo.ItemId.DiseaseDatabase;
+import hpo.ItemId.ItemDatabase;
 import hpo.HpoDataProvider;
 import hpo.QueryModification;
 import ontologizer.go.Ontology;
@@ -96,7 +96,7 @@ public class AnnotationSimulator {
 		return annotations.values().stream().mapToInt(e -> e.getAnnotations().size()).sum();
 	}
 
-	public List<List<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
+	public List<List<Term>> simulatePatients(ItemDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
 			double chanceOfBeingMappedUp, int querySize) throws DiseaseNotFoundException {
 		return simulatePatients(diseaseDb, diseaseIdent, numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp, querySize, querySize);
 	}
@@ -107,7 +107,7 @@ public class AnnotationSimulator {
 				lowerBoundQuerySize, upperBoundQuerySize);
 	}
 
-	public List<List<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
+	public List<List<Term>> simulatePatients(ItemDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
 			double chanceOfBeingMappedUp, int lowerBoundQuerySize, int upperBoundQuerySize) throws DiseaseNotFoundException {
 
 		ItemId id = new ItemId(diseaseDb, diseaseIdent);
