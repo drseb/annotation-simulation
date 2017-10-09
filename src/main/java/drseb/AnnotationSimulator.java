@@ -1,13 +1,15 @@
 package drseb;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import drseb.exception.DiseaseNotFoundException;
-import hpo.DiseaseEntry;
-import hpo.DiseaseId;
-import hpo.DiseaseId.DiseaseDatabase;
+import hpo.Item;
+import hpo.ItemId;
+import hpo.ItemId.DiseaseDatabase;
 import hpo.HpoDataProvider;
 import hpo.QueryModification;
 import ontologizer.go.Ontology;
@@ -23,7 +25,7 @@ import util.HpoHelper;
 public class AnnotationSimulator {
 
 	private Ontology ontology;
-	private HashMap<DiseaseId, DiseaseEntry> annotations;
+	private HashMap<ItemId, Item> annotations;
 	private HpoHelper hpoHelper;
 	private QueryModification queryModification;
 
@@ -68,6 +70,24 @@ public class AnnotationSimulator {
 		}
 	}
 
+	public Set<ItemId> getAllObjectsAnnotated() {
+		return annotations.keySet();
+	}
+
+	public List<ItemId> getRandomSetObjectsAnnotated(int numObjectsToReturn) {
+
+		ArrayList<ItemId> allObjectsAnnotated = new ArrayList<ItemId>(getAllObjectsAnnotated());
+
+		if (numObjectsToReturn > allObjectsAnnotated.size())
+			numObjectsToReturn = allObjectsAnnotated.size();
+
+		Collections.shuffle(allObjectsAnnotated, queryModification.getRandomNumberGenerator());
+
+		List<ItemId> sublist = allObjectsAnnotated.subList(0, numObjectsToReturn - 1);
+		return sublist;
+
+	}
+
 	public int getNumberObjectsAnnotated() {
 		return annotations.keySet().size();
 	}
@@ -81,10 +101,16 @@ public class AnnotationSimulator {
 		return simulatePatients(diseaseDb, diseaseIdent, numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp, querySize, querySize);
 	}
 
+	public List<List<Term>> simulatePatients(ItemId diseaseId, int numberOfPatients, double fractionOfNoiseTerms, double chanceOfBeingMappedUp,
+			int lowerBoundQuerySize, int upperBoundQuerySize) throws DiseaseNotFoundException {
+		return simulatePatients(diseaseId.getDiseaseDb(), diseaseId.getDiseaseIdInDb(), numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp,
+				lowerBoundQuerySize, upperBoundQuerySize);
+	}
+
 	public List<List<Term>> simulatePatients(DiseaseDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
 			double chanceOfBeingMappedUp, int lowerBoundQuerySize, int upperBoundQuerySize) throws DiseaseNotFoundException {
 
-		DiseaseId id = new DiseaseId(diseaseDb, diseaseIdent);
+		ItemId id = new ItemId(diseaseDb, diseaseIdent);
 		if (!annotations.containsKey(id)) {
 			throw new DiseaseNotFoundException(id);
 		}
@@ -93,7 +119,7 @@ public class AnnotationSimulator {
 			throw new IllegalArgumentException("Number of patients must be larger than 0.");
 		}
 
-		DiseaseEntry diseaseEntry = annotations.get(id);
+		Item diseaseEntry = annotations.get(id);
 		List<List<Term>> simulatedQueries = new ArrayList<>();
 		for (int i = 0; i < numberOfPatients; i++) {
 			List<Term> patientAnnotations = queryModification.generateAnnotationSet(diseaseEntry.getAnnotations(), fractionOfNoiseTerms,
