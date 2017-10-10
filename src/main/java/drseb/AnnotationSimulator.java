@@ -27,7 +27,6 @@ public class AnnotationSimulator {
 
 	private Ontology ontology;
 	private SlimDirectedGraphView<Term> ontologySlim;
-
 	private HashMap<ItemId, Item> annotations;
 	private QueryModification queryModification;
 
@@ -98,6 +97,10 @@ public class AnnotationSimulator {
 
 	public Ontology getOntology() {
 		return ontology;
+	}
+
+	public SlimDirectedGraphView<Term> getOntologySlim() {
+		return ontologySlim;
 	}
 
 	public int getNumberObjectsAnnotated() {
