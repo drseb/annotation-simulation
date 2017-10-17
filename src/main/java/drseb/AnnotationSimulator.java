@@ -86,7 +86,7 @@ public class AnnotationSimulator {
 
 		Collections.shuffle(allObjectsAnnotated, queryModification.getRandomNumberGenerator());
 
-		List<ItemId> sublist = allObjectsAnnotated.subList(0, numObjectsToReturn - 1);
+		List<ItemId> sublist = allObjectsAnnotated.subList(0, numObjectsToReturn);
 		return sublist;
 
 	}

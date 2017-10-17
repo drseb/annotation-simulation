@@ -11,7 +11,7 @@ public class TestSimulator {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.out.println("setUpBeforeClass");
-		AnnotationSimulator simulator = new AnnotationSimulator("src/test/resources/hp.obo", "src/test/resources/phenotype_annotation.tab",
+		AnnotationSimulator simulator = new AnnotationSimulator("src/test/resources/hp.obo", "src/test/resources/phenotype_annotation.tab.gz",
 				OntologyProjectType.HPO);
 		TestSimulator.simulator = simulator;
 	}
