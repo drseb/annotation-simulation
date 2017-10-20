@@ -116,6 +116,13 @@ public class AnnotationSimulator {
 		return simulatePatients(diseaseDb, diseaseIdent, numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp, querySize, querySize);
 	}
 
+	public List<Term> simulatePatient(ItemId itemId, double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int lowerBoundQuerySize,
+			int upperBoundQuerySize) throws DiseaseNotFoundException {
+		Item diseaseEntry = annotations.get(itemId);
+		return queryModification.generateAnnotationSet(diseaseEntry.getAnnotations(), fractionOfNoiseTerms, chanceOfBeingMappedUp,
+				lowerBoundQuerySize, upperBoundQuerySize);
+	}
+
 	public List<List<Term>> simulatePatients(ItemId diseaseId, int numberOfPatients, double fractionOfNoiseTerms, double chanceOfBeingMappedUp,
 			int lowerBoundQuerySize, int upperBoundQuerySize) throws DiseaseNotFoundException {
 		return simulatePatients(diseaseId.getDiseaseDb(), diseaseId.getDiseaseIdInDb(), numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp,
