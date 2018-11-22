@@ -11,9 +11,9 @@ import hpo.HpoDataProvider;
 import hpo.Item;
 import hpo.ItemId;
 import hpo.ItemId.ItemDatabase;
+import ontologizer.ontology.Ontology;
+import ontologizer.ontology.Term;
 import hpo.QueryModification;
-import ontologizer.go.Ontology;
-import ontologizer.go.Term;
 import sonumina.math.graph.SlimDirectedGraphView;
 import util.HpoHelper;
 
