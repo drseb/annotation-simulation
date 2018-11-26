@@ -6,14 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.math3.distribution.PoissonDistribution;
+
 import drseb.exception.DiseaseNotFoundException;
 import hpo.HpoDataProvider;
 import hpo.Item;
 import hpo.ItemId;
 import hpo.ItemId.ItemDatabase;
+import hpo.QueryModification;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.Term;
-import hpo.QueryModification;
 import sonumina.math.graph.SlimDirectedGraphView;
 import util.HpoHelper;
 
@@ -112,8 +114,9 @@ public class AnnotationSimulator {
 	}
 
 	public List<List<Term>> simulatePatients(ItemDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
-			double chanceOfBeingMappedUp, int querySize) throws DiseaseNotFoundException {
-		return simulatePatients(diseaseDb, diseaseIdent, numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp, querySize, querySize);
+			double chanceOfBeingMappedUp, int poisson_k) throws DiseaseNotFoundException {
+		PoissonDistribution poisson = new PoissonDistribution(5);
+		return simulatePatients(diseaseDb, diseaseIdent, numberOfPatients, fractionOfNoiseTerms, chanceOfBeingMappedUp, poisson);
 	}
 
 	public List<Term> simulatePatient(ItemId itemId, double fractionOfNoiseTerms, double chanceOfBeingMappedUp, int lowerBoundQuerySize,
@@ -146,6 +149,29 @@ public class AnnotationSimulator {
 		for (int i = 0; i < numberOfPatients; i++) {
 			List<Term> patientAnnotations = queryModification.generateAnnotationSet(diseaseEntry.getAnnotations(), fractionOfNoiseTerms,
 					chanceOfBeingMappedUp, lowerBoundQuerySize, upperBoundQuerySize);
+			simulatedQueries.add(patientAnnotations);
+		}
+
+		return simulatedQueries;
+	}
+
+	private List<List<Term>> simulatePatients(ItemDatabase diseaseDb, String diseaseIdent, int numberOfPatients, double fractionOfNoiseTerms,
+			double chanceOfBeingMappedUp, PoissonDistribution poisson) throws DiseaseNotFoundException {
+
+		ItemId id = new ItemId(diseaseDb, diseaseIdent);
+		if (!annotations.containsKey(id)) {
+			throw new DiseaseNotFoundException(id);
+		}
+
+		if (numberOfPatients < 1) {
+			throw new IllegalArgumentException("Number of patients must be larger than 0.");
+		}
+
+		Item diseaseEntry = annotations.get(id);
+		List<List<Term>> simulatedQueries = new ArrayList<>();
+		for (int i = 0; i < numberOfPatients; i++) {
+			List<Term> patientAnnotations = queryModification.generateAnnotationSet(diseaseEntry.getAnnotations(), fractionOfNoiseTerms,
+					chanceOfBeingMappedUp, poisson);
 			simulatedQueries.add(patientAnnotations);
 		}
 
