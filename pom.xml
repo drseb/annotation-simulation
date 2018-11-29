@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>javautil_pheno</groupId>
 			<artifactId>javautil_pheno</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
